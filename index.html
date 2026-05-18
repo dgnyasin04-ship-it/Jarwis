@@ -3,488 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JARWIS FOUNDER - ULTIMATE HUD</title>
-    <style>
-        /* ==========================================================================
-           JARWIS ULTIMATE MULTI-FUNCTION HUD STYLE (MOBILE OPTIMIZED)
-           ========================================================================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
-            user-select: none;
-        }
-
-        body, html {
-            background-color: #02040a;
-            color: #00f3ff;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* VİZYON PANELİ & ARKA PLAN MATRIX */
-        .vision-matrix-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: radial-gradient(circle at center, #050b14 0%, #010205 100%);
-        }
-
-        #vision-stream {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.25;
-            display: none;
-            filter: hue-rotate(5deg) contrast(1.25) brightness(0.85);
-        }
-
-        .scan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(to bottom, rgba(0, 243, 255, 0.15), transparent);
-            animation: scanLineMove 5s linear infinite;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        @keyframes scanLineMove {
-            0% { top: -5%; }
-            100% { top: 105%; }
-        }
-
-        /* ANA HUD KAPSAYICI (DİKEY DÜZEN) */
-        .hud-grid-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 15px;
-            pointer-events: none;
-        }
-
-        /* ÜST PANEL: DONANIM VE SİSTEM GRAFİKLERİ */
-        .hud-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            width: 100%;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-            padding-bottom: 8px;
-        }
-
-        .sys-identity h1 {
-            font-size: 16px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
-        }
-
-        .sys-identity span {
-            font-size: 9px;
-            color: rgba(0, 243, 255, 0.5);
-        }
-
-        .hardware-telemetry {
-            text-align: right;
-            font-size: 10px;
-            line-height: 1.4;
-            color: rgba(0, 243, 255, 0.8);
-        }
-
-        .telemetry-row span {
-            color: #ff3b30;
-            animation: pulseText 1s infinite alternate;
-        }
-
-        @keyframes pulseText {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* MERKEZ: FONKSİYONEL SİBER ÇEKİRDEK */
-        .hud-center-stage {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            pointer-events: auto;
-            width: 100%;
-        }
-
-        /* Sol Petek Yapısı Simülasyonu */
-        .honeycomb-deco {
-            position: absolute;
-            left: 5px;
-            top: 15%;
-            font-size: 9px;
-            color: rgba(0, 243, 255, 0.15);
-            line-height: 1.2;
-            pointer-events: none;
-        }
-
-        /* Sağ İkincil Kırmızı Çekirdek Simülasyonu */
-        .secondary-node {
-            position: absolute;
-            right: 10px;
-            top: 10%;
-            width: 35px;
-            height: 35px;
-            border: 1px dashed rgba(255, 59, 48, 0.4);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .red-pulse-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #ff3b30;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #ff3b30;
-            animation: redBlink 1.2s infinite;
-        }
-
-        @keyframes redBlink {
-            0%, 100% { transform: scale(0.8); opacity: 0.4; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
-
-        /* Çok Katmanlı Küre Merkez Grubu */
-        .core-sphere-container {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .orbit-layer {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px dashed rgba(0, 243, 255, 0.25);
-        }
-
-        .layer-4 {
-            width: 100%;
-            height: 100%;
-            border-top: 2px solid #00f3ff;
-            border-bottom: 2px solid #00f3ff;
-            animation: spinClockwise 25s linear infinite;
-        }
-
-        .layer-3 {
-            width: 82%;
-            height: 82%;
-            border-left: 1.5px dashed #00f3ff;
-            border-right: 1.5px dashed #00f3ff;
-            animation: spinCounterClockwise 15s linear infinite;
-        }
-
-        .layer-2 {
-            width: 64%;
-            height: 64%;
-            border: 1px double rgba(0, 243, 255, 0.4);
-            box-shadow: inset 0 0 12px rgba(0, 243, 255, 0.15);
-        }
-
-        /* Çok Fonksiyonlu Menü Yapısı */
-        .layer-center-node {
-            width: 44%;
-            height: 44%;
-            background: rgba(5, 15, 30, 0.85);
-            border: 2px solid #00f3ff;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
-            z-index: 5;
-            color: #ffffff;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-align: center;
-        }
-
-        .layer-center-node svg {
-            width: 24px;
-            height: 24px;
-            stroke: #00f3ff;
-            fill: none;
-            stroke-width: 2;
-            margin-bottom: 4px;
-            animation: floatGlow 2.5s infinite ease-in-out;
-        }
-
-        @keyframes spinClockwise { 100% { transform: rotate(360deg); } }
-        @keyframes spinCounterClockwise { 100% { transform: rotate(-360deg); } }
-        @keyframes floatGlow {
-            0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 2px #00f3ff); }
-            50% { transform: translateY(-3px); filter: drop-shadow(0 0 10px #00f3ff); }
-        }
-
-        .action-instruction {
-            margin-top: 15px;
-            font-size: 10px;
-            color: rgba(0, 243, 255, 0.6);
-            letter-spacing: 1px;
-            text-align: center;
-        }
-
-        /* ALT PANEL: VERİ TERMİNALİ VE DIŞ HALKA TEKST */
-        .hud-bottom-bar {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-        }
-
-        /* Grafik Ses Dalgaları */
-        .hud-audio-wave {
-            display: none;
-            justify-content: center;
-            align-items: center;
-            gap: 4px;
-            height: 35px;
-            width: 100%;
-        }
-
-        .wave-bar {
-            width: 3px;
-            height: 8px;
-            background-color: #00f3ff;
-            border-radius: 1px;
-            box-shadow: 0 0 6px rgba(0, 243, 255, 0.8);
-            animation: waveBounce 0.4s ease-in-out infinite alternate;
-        }
-
-        .wave-bar:nth-child(even) { animation-delay: 0.15s; }
-        .wave-bar:nth-child(3n) { animation-delay: 0.3s; }
-
-        @keyframes waveBounce {
-            0% { transform: scaleY(0.6); opacity: 0.5; }
-            100% { transform: scaleY(1.3); height: 35px; opacity: 1; }
-        }
-
-        /* Gelişmiş Fonksiyonel Terminal Matrisi */
-        .hud-diagnostic-terminal {
-            background: rgba(2, 4, 10, 0.9);
-            border: 1px solid rgba(0, 243, 255, 0.25);
-            padding: 12px;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.05);
-        }
-
-        .terminal-header-line {
-            font-size: 11px;
-            color: rgba(0, 243, 255, 0.5);
-            border-bottom: 1px dashed rgba(0, 243, 255, 0.15);
-            padding-bottom: 4px;
-            margin-bottom: 4px;
-        }
-
-        .terminal-content-area {
-            display: flex;
-            gap: 8px;
-            align-items: flex-start;
-        }
-
-        .pointer-blink {
-            color: #00f3ff;
-            font-weight: bold;
-            animation: pointerFlash 0.8s infinite;
-        }
-
-        @keyframes pointerFlash { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-
-        .terminal-text {
-            font-size: 12px;
-            color: #e2e8f0;
-            line-height: 1.5;
-            letter-spacing: 0.5px;
-        }
-    </style>
+    <title>JARWIS v4.5 - STARK INDUSTRIES ARCHITECTURE</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="vision-matrix-bg">
-        <video id="vision-stream" autoplay playsinline muted></video>
-        <div class="scan-line"></div>
+    <div class="stark-vision-container">
+        <video id="stark-camera" autoplay playsinline muted></video>
+        <div class="hologram-grid"></div>
+        <div class="laser-scanner"></div>
     </div>
 
-    <div class="hud-grid-wrapper">
+    <div class="hud-corner-brackets">
+        <div class="bracket b-top-left"></div>
+        <div class="bracket b-top-right"></div>
+        <div class="bracket b-bottom-left"></div>
+        <div class="bracket b-bottom-right"></div>
+    </div>
+
+    <div class="stark-interface-layer">
         
-        <header class="hud-top-bar">
-            <div class="sys-identity">
-                <h1>JARWIS v4.0</h1>
-                <span>FOUNDER PROTECTION: ACTIVE</span>
+        <header class="stark-header">
+            <div class="header-left">
+                <div class="stark-logo">JARWIS // ARCH-4.5</div>
+                <div class="security-status">[ FOUNDER PROTECTION: SECURE ]</div>
             </div>
-            <div class="hardware-telemetry">
-                <div>CPU: 42% // TEMP: 39°C</div>
-                <div class="telemetry-row">INTEGRATIONS: <span>16/16 OK</span></div>
+            <div class="header-right">
+                <div class="telemetry-node">SYS_TEMP: <span id="telemetry-temp">38.4°C</span></div>
+                <div class="telemetry-node">AI_NETWORK: <span class="neon-green">UNLIMITED</span></div>
+                <div class="telemetry-node">NODE_STREAM: <span id="telemetry-fps">60 FPS</span></div>
             </div>
         </header>
 
-        <main class="hud-center-stage">
-            <div class="honeycomb-deco">
-                ⬡ ⬡ ⬡<br>⬡ ⬡ ⬡ ⬡<br>⬡ ⬡ ⬡
-            </div>
-
-            <div class="secondary-node">
-                <div class="red-pulse-dot"></div>
-            </div>
-
-            <div class="core-sphere-container" id="hud-master-trigger">
-                <div class="orbit-layer layer-4"></div>
-                <div class="orbit-layer layer-3"></div>
-                <div class="orbit-layer layer-2"></div>
-                <div class="layer-center-node">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M3 12h3m12 0h3M12 3v3m0 12v3"/>
-                    </svg>
-                    <span>CORE LOCK</span>
+        <main class="stark-center-grid">
+            
+            <div class="hud-side-panel panel-left">
+                <div class="panel-title">[ TARGET DIAGNOSTICS ]</div>
+                <div class="honeycomb-grid-simulation">
+                    <div class="honey-row">⬢ ⬢ ⬢ ⬢</div>
+                    <div class="honey-row">⬢ ⬢ ⬢ ⬢ ⬢</div>
+                    <div class="honey-row">⬢ ⬢ <span class="alert-orange">⬢</span> ⬢</div>
+                    <div class="honey-row">⬢ ⬢ ⬢ ⬢</div>
+                </div>
+                <div class="live-data-ticker">
+                    <div>> ANOMALY_CHECK: 0%</div>
+                    <div>> FIREBASE_SYNC: OK</div>
+                    <div>> ORBITAL_LOCK: STABLE</div>
                 </div>
             </div>
-            <p class="action-instruction" id="status-instruction">MATRIX BAĞLANTISI İÇİN MERKEZE DOKUNUN</p>
-        </main>
 
-        <footer class="hud-bottom-bar">
-            <div class="hud-audio-wave" id="hud-waves">
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
-                <div class="wave-bar"></div>
+            <div class="stark-core-mainframe">
+                <div class="stark-sphere-wrapper" id="jarwis-activation-core">
+                    <div class="stark-orbit layer-outer"></div>
+                    <div class="stark-orbit layer-mid"></div>
+                    <div class="stark-orbit layer-inner"></div>
+                    <div class="stark-nucleus-center">
+                        <div class="inner-glow-pulse"></div>
+                        <svg viewBox="0 0 24 24" class="core-icon">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="core-sub-text" id="core-status-msg">MATRIX ATEŞLEMESİ İÇİN KİLİDİ AÇIN</div>
             </div>
 
-            <div class="hud-diagnostic-terminal">
-                <div class="terminal-header-line">[DIAGNOSTICS: UNLIMITED CORES ENGINE]</div>
-                <div class="terminal-content-area">
-                    <span class="pointer-blink">■</span>
-                    <p class="terminal-text" id="terminal-log">Sistem hazır durumda, limitler kaldırıldı. Sınırsız Canlı Modu ateşlemek için merkez matrisi kilitleyin.</p>
+            <div class="hud-side-panel panel-right">
+                <div class="panel-title">[ WEAPONS & ENERGY ]</div>
+                <div class="radar-box">
+                    <div class="radar-sweep"></div>
+                    <div class="radar-center-dot"></div>
+                </div>
+                <div class="live-data-ticker">
+                    <div>> CORE_OUTPUT: 100%</div>
+                    <div>> CURRENT_USER: EMRE</div>
+                    <div>> THREAT_LEVEL: NONE</div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="stark-footer">
+            
+            <div class="stark-audio-waveframe" id="stark-waveframe">
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+                <div class="stark-bar"></div>
+            </div>
+
+            <div class="stark-terminal-box">
+                <div class="terminal-hud-line">[ JARWIS SUBSYSTEM TERMINAL LOG ]</div>
+                <div class="terminal-body">
+                    <span class="terminal-cursor">█</span>
+                    <p id="jarwis-terminal-output">Sistem standby modunda. Canlı vizyon modülünü ve ses tünellerini senkronize etmek için ana hologram çekirdeğine dokunun efendim.</p>
                 </div>
             </div>
         </footer>
+
     </div>
 
-    <script>
-        const masterTrigger = document.getElementById('hud-master-trigger');
-        const visionStream = document.getElementById('vision-stream');
-        const statusInstruction = document.getElementById('status-instruction');
-        const hudWaves = document.getElementById('hud-waves');
-        const terminalLog = document.getElementById('terminal-log');
-
-        let isCoreLinked = false;
-        let streamInstance = null;
-
-        // KOTASIZ VE SINIRSIZ YAPAY ZEKA KÖPRÜSÜ
-        async function queryUnlimitedAI(prompt) {
-            try {
-                const res = await fetch(`https://openrouter.ai/api/v1/chat/completions`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        "model": "meta-llama/llama-3-8b-instruct:free",
-                        "messages": [
-                            {"role": "system", "content": "Sen JARWIS'sin. Kurucuna sadık, fütüristik, aşırı zeki ve karizmatik bir yapay zekasın. Cevapların çok kısa, net ve bilimkurgu havasında olsun."},
-                            {"role": "user", "content": prompt}
-                        ]
-                    })
-                });
-                const data = await res.json();
-                return data.choices[0].message.content;
-            } catch (e) {
-                return "Bağlantı şifreli tünelde stabil kalmaya devam ediyor efendim. Emirlerinizi bekliyorum.";
-            }
-        }
-
-        async function startUltimateLiveMode() {
-            try {
-                terminalLog.innerText = "Donanım katmanları taranıyor... Optik mercekler kilitleniyor.";
-                
-                const constraints = {
-                    video: { facingMode: "user" },
-                    audio: false
-                };
-
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                streamInstance = stream;
-                visionStream.srcObject = stream;
-
-                // Arayüzü canlandırma ve parlatma
-                visionStream.style.display = "block";
-                hudWaves.style.display = "flex";
-                masterTrigger.style.filter = "drop-shadow(0 0 35px #00f3ff) hue-rotate(30deg)";
-                
-                statusInstruction.innerText = "JARWIS CORE LINKED // DISCONNECT FOR CORE LOCK";
-                
-                // Kotasız yapay zekayı anında tetikliyoruz
-                const initialGreeting = await queryUnlimitedAI("Sistem başarıyla kuruldu ve tüm fonksiyonlar devrede. Kurucuna sistemin hazır olduğunu belirten kısa ve havalı bir rapor ver.");
-                terminalLog.innerText = initialGreeting;
-
-                isCoreLinked = true;
-            } catch (err) {
-                console.error(err);
-                // Tarayıcı yerel dosya engeli olsa bile simülasyon grafikleri ve sınırsız yapay zeka çalışır
-                hudWaves.style.display = "flex";
-                masterTrigger.style.filter = "drop-shadow(0 0 35px #00f3ff)";
-                statusInstruction.innerText = "SIMULATION MODE // FREE CORE ACTIVE";
-                terminalLog.innerText = "Tarayıcı güvenlik kilidi yüzünden kamera akışı arkaya yansıtılamadı ancak kotasız ve sınırsız Llama veri çekirdeğim tamamen aktif efendim. Sizi dinliyorum.";
-                isCoreLinked = true;
-            }
-        }
-
-        function stopUltimateLiveMode() {
-            if (streamInstance) {
-                streamInstance.getTracks().forEach(track => track.stop());
-                streamInstance = null;
-            }
-            visionStream.style.display = "none";
-            hudWaves.style.display = "none";
-            masterTrigger.style.filter = "none";
-            
-            statusInstruction.innerText = "MATRIX BAĞLANTISI İÇİN MERKEZE DOKUNUN";
-            terminalLog.innerText = "Sistem hazır durumda, limitler kaldırıldı. Sınırsız Canlı Modu ateşlemek için merkez matrisi kilitleyin.";
-            isCoreLinked = false;
-        }
-
-        masterTrigger.addEventListener('click', () => {
-            if (!isCoreLinked) {
-                startUltimateLiveMode();
-            } else {
-                stopUltimateLiveMode();
-            }
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
